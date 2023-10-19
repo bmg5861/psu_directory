@@ -1,0 +1,4 @@
+env
+
+/psu_directory/db.sqlite3
+/psu_directory/psu_directory/settings.py
