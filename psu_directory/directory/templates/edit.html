@@ -1,0 +1,26 @@
+<head>  
+    <meta charset="UTF-8">  
+    <title>Index</title>  
+    {% load static %}  
+    <link rel="stylesheet" href="{% static 'directory/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.0.3-alpha/dist/css/materialize.min.css">  
+</head>  
+<body style="background-color: rgb(22, 41, 101);">   
+<div class="container" id="newuser" style="margin-top: 5%; padding: 10px;">
+  <header>
+      <h1>Edit Profile</h1>
+    </header>
+    <form className="" encType="multipart/form-data" method="POST" action="/update/{{staff.id}}">
+      {% csrf_token %}
+      <input type="text" name="name" placeholder = "Name" value="{{ staff.name }}" required/>
+      <textarea placeholder="please enter discription" name="discription" id="discription" cols="30" rows="10" style="height: 7rem;" required> {{ staff.discription }}</textarea>
+      <input type="file" id="image" title="image" name="image" value="{{staff.image.url}}">
+      <h4>current profile picture</h4>
+      <div>
+        <img src="{{staff.image.url}}" alt="image" width="100" hight="100">
+      </div>
+      <button class="waves-effect waves-light btn" type="submit">Update</button>
+    </form>
+    <a href="/show" class="waves-effect waves-light btn">Cancel</a>
+  </div>
+</body>  

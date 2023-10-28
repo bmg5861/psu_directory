@@ -1,0 +1,97 @@
+{% load static %}
+
+<script>
+  function comparatorName(a, b) { 
+            if (a.dataset.name < b.dataset.name) 
+                return -1; 
+            if (a.dataset.name > b.dataset.name) 
+                return 1; 
+            return 0; 
+        } 
+  function comparatorId(a, b) { 
+            if (a.dataset.id < b.dataset.id) 
+                return -1; 
+            if (a.dataset.id > b.dataset.id) 
+                return 1; 
+            return 0; 
+        }      
+        // Function to sort Data 
+        function SortDataName() { 
+            var subjects = 
+                document.querySelectorAll("[data-name]"); 
+            var subjectsArray = Array.from(subjects); 
+            let sorted = subjectsArray.sort(comparatorName); 
+            sorted.forEach(e => 
+                document.querySelector("#table"). 
+                    appendChild(e)); 
+        } 
+
+        function SortDataId() { 
+            var subjects = 
+                document.querySelectorAll("[data-id]"); 
+            var subjectsArray = Array.from(subjects); 
+            let sorted = subjectsArray.sort(comparatorId); 
+            sorted.forEach(e => 
+                document.querySelector("#table"). 
+                    appendChild(e)); 
+        } 
+
+  function Search(){
+    let input = document.getElementById('search').value 
+    input=input.toLowerCase(); 
+    let x = document.getElementsByClassName('profile'); 
+      
+    for (i = 0; i < x.length; i++) {  
+        if (!x[i].dataset.name.toLowerCase().includes(input) && !x[i].dataset.id.toLowerCase().includes(input) ) { 
+            x[i].style.display="none"; 
+        } 
+        else { 
+            x[i].style.display="";                  
+        } 
+    } 
+  }
+</script>
+
+<body style="background-color: rgb(22, 41, 101);">
+    <link rel="stylesheet" href="{% static 'directory/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.0.3-alpha/dist/css/materialize.min.css">
+    <h1 style="color:white; text-align:center;">PennState Directory</h1>
+
+    <div class="container" style="margin-top: 3%;">
+          <h4 style="color: white;">Search by ID or Name</h4>
+          <input type="text" id="search" title="search" onkeyup="Search()" placeholder="Search by ID or Name" style="border-radius: 10px; margin-bottom: 1%;">
+        <h4 style="color: white;">Sort by ID or Name</h4>
+        <button class="waves-effect waves-light btn" onclick="SortDataId()">ID</button>
+        <button class="waves-effect waves-light btn" onclick="SortDataName()">Name</button>
+    </div>
+
+<div class="container row table" id="table">
+  {% for staff in staffs %}
+  <div class="profile-card col s6 profile" data-name="{{staff.name}}" data-id="{{staff.id}}">
+    <img src="{{staff.image.url}}" alt="Avatar" />
+    <div class="profile-info">
+      <h2 class="profileName">{{staff.name}}</h2>
+      <p>{{staff.discription}}</p>
+      <p class="profileId">ID: {{staff.id}}</p>
+      <a href="delete/{{ staff.id }}" class="waves-effect waves-light btn">delete</a>
+      <a href="edit/{{ staff.id }}" class="waves-effect waves-light btn">edit</a>
+    </div>
+  </div>  
+  {% endfor %}
+</div>
+
+<div class="container" id="newuser" style="padding: 5; margin-bottom: 2%; margin-top: 2%;">
+<header>
+    <h1 style="margin-top: -1;">New profile</h1>
+  </header>
+  <form className="post-form" encType="multipart/form-data" method="POST" action="/staf">
+    {% csrf_token %} 
+    <input type="text" name="name" placeholder="Name" value="{{ form.name }}" required/>
+    <textarea placeholder="please enter discription" name="discription" id="discription" cols="30" rows="10" style="height: 7rem; margin-top: 5;" required>{{form.discription}}</textarea>
+    <input type="file" id="image" title="image" name="image" required/>
+    <br>
+      <button class="waves-effect waves-light btn" type="submit" style="margin-top: 1%;">Create</button>
+  </form>
+</div>
+
+</body>
